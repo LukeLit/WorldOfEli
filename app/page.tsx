@@ -42,6 +42,13 @@ const cards = [
     cta: "Open /lp",
   },
   {
+    title: "Luke Host Cheat Sheet",
+    description:
+      "Personal host page with engagement tactics and sticky quick links.",
+    href: "/luke",
+    cta: "Open /luke",
+  },
+  {
     title: "Concept Art",
     description: "Store characters, map sketches, and style ideas in one place.",
     href: "/concepts",
@@ -155,6 +162,10 @@ export default function Home() {
               and{" "}
               <Link href="/dave" className="underline underline-offset-2">
                 Dave setup checklist
+              </Link>
+              ,{" "}
+              <Link href="/luke" className="underline underline-offset-2">
+                Luke cheatsheet
               </Link>
               ,{" "}
               <a
