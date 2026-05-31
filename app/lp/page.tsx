@@ -75,6 +75,13 @@ const defaultSessionForm: SessionForm = {
   nextSessionFocus: "",
 };
 
+const sectionMeta: Record<string, { icon: string; color: string; noteKey: string }> = {
+  "1) Discovery Questions": { icon: "🔍", color: "card-purple", noteKey: "discovery" },
+  "2) Scope Questions": { icon: "🎯", color: "card-green", noteKey: "scope" },
+  "3) Build Check-In Prompts": { icon: "🔨", color: "card-orange", noteKey: "build" },
+  "4) Wrap-Up Questions": { icon: "🎁", color: "card-yellow", noteKey: "wrap" },
+};
+
 export default function LessonPlanPage() {
   const checklistItems = useMemo(
     () => [
@@ -102,23 +109,27 @@ export default function LessonPlanPage() {
     [],
   );
 
-  const [checklistState, setChecklistState] = useState<Record<string, boolean>>(() =>
-    readStorageJson(lpChecklistStorageKey, {}),
+  const [checklistState, setChecklistState] = useState<Record<string, boolean>>(
+    () => readStorageJson(lpChecklistStorageKey, {}),
   );
-  const [sectionNotes, setSectionNotes] = useState<Record<string, string>>(() =>
-    readStorageJson(lpNotesStorageKey, {
-      discovery: "",
-      scope: "",
-      build: "",
-      wrap: "",
-    }),
+  const [sectionNotes, setSectionNotes] = useState<Record<string, string>>(
+    () =>
+      readStorageJson(lpNotesStorageKey, {
+        discovery: "",
+        scope: "",
+        build: "",
+        wrap: "",
+      }),
   );
   const [sessionForm, setSessionForm] = useState<SessionForm>(() =>
     readStorageJson(lpSessionFormStorageKey, defaultSessionForm),
   );
 
   useEffect(() => {
-    localStorage.setItem(lpChecklistStorageKey, JSON.stringify(checklistState));
+    localStorage.setItem(
+      lpChecklistStorageKey,
+      JSON.stringify(checklistState),
+    );
   }, [checklistState]);
 
   useEffect(() => {
@@ -126,20 +137,29 @@ export default function LessonPlanPage() {
   }, [sectionNotes]);
 
   useEffect(() => {
-    localStorage.setItem(lpSessionFormStorageKey, JSON.stringify(sessionForm));
+    localStorage.setItem(
+      lpSessionFormStorageKey,
+      JSON.stringify(sessionForm),
+    );
   }, [sessionForm]);
 
   const groupedChecklist = useMemo(() => {
-    return checklistItems.reduce<Record<string, typeof checklistItems>>((acc, item) => {
-      if (!acc[item.group]) {
-        acc[item.group] = [];
-      }
-      acc[item.group].push(item);
-      return acc;
-    }, {});
+    return checklistItems.reduce<Record<string, typeof checklistItems>>(
+      (acc, item) => {
+        if (!acc[item.group]) {
+          acc[item.group] = [];
+        }
+        acc[item.group].push(item);
+        return acc;
+      },
+      {},
+    );
   }, [checklistItems]);
 
-  function updateSectionNote(key: "discovery" | "scope" | "build" | "wrap", value: string) {
+  function updateSectionNote(
+    key: "discovery" | "scope" | "build" | "wrap",
+    value: string,
+  ) {
     setSectionNotes((previous) => ({
       ...previous,
       [key]: value,
@@ -175,240 +195,193 @@ export default function LessonPlanPage() {
   }
 
   return (
-    <main className="min-h-screen mario-bg px-5 py-10">
+    <main className="min-h-screen mario-bg px-4 py-8 sm:px-6 sm:py-12">
       <section className="question-panel mx-auto flex w-full max-w-5xl flex-col gap-6">
+        {/* Header */}
         <header>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
-            /lp
+            📋 /lp
           </p>
-          <h1 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
-            Eli Session Lesson Plan
+          <h1 className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+            Session Lesson Plan
           </h1>
-          <p className="mt-3 text-slate-700">
-            Use this as your live runbook so you can guide the call, ask the
-            right questions, and keep momentum toward a playable build.
+          <p className="mt-2 text-slate-600">
+            Live runbook for guiding the call, asking the right questions, and
+            keeping momentum toward a playable build.
           </p>
           <button
             type="button"
-            className="mission-link mt-4 inline-flex"
+            className="mission-link mt-3 inline-flex text-sm"
             onClick={resetLessonPlanState}
           >
-            Reset Saved Lesson Plan
+            🔄 Reset All
           </button>
         </header>
 
-        <section className="mission-card">
-          <h2 className="text-2xl font-black">Session Structure (60 minutes)</h2>
-          <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
-            <li>0-5 min: Intro Eli to Slack + Viktor</li>
-            <li>5-15 min: Discovery questions and pick a game idea</li>
-            <li>15-25 min: Scope to one action, one goal, one restart</li>
-            <li>25-50 min: Build and test the first playable loop</li>
-            <li>50-60 min: Deploy, celebrate, and capture next steps</li>
-          </ul>
+        {/* Timeline */}
+        <section className="mission-card card-blue">
+          <h2 className="text-xl font-bold">⏱️ Session Structure (60 min)</h2>
+          <div className="mt-3 grid gap-2 text-sm text-slate-600 sm:grid-cols-5">
+            {[
+              { time: "0–5", label: "Intro", icon: "👋" },
+              { time: "5–15", label: "Discover", icon: "🔍" },
+              { time: "15–25", label: "Scope", icon: "🎯" },
+              { time: "25–50", label: "Build!", icon: "🔨" },
+              { time: "50–60", label: "Wrap-up", icon: "🎁" },
+            ].map((step) => (
+              <div
+                key={step.label}
+                className="rounded-lg bg-white/60 px-3 py-2 text-center"
+              >
+                <p className="text-lg">{step.icon}</p>
+                <p className="font-bold text-slate-800">{step.time} min</p>
+                <p>{step.label}</p>
+              </div>
+            ))}
+          </div>
         </section>
 
+        {/* Checklist sections */}
         <section className="grid gap-4 md:grid-cols-2">
-          <article className="mission-card">
-            <h2 className="text-xl font-black">1) Discovery Questions</h2>
-            <div className="mt-3 space-y-2 text-slate-700">
-              {groupedChecklist["1) Discovery Questions"]?.map((item) => (
-                <label key={item.id} className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={Boolean(checklistState[item.id])}
-                    onChange={(event) =>
-                      setChecklistState((previous) => ({
-                        ...previous,
-                        [item.id]: event.target.checked,
-                      }))
-                    }
-                  />
-                  <span>{item.text}</span>
-                </label>
-              ))}
-            </div>
-            <textarea
-              className="mt-3 min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Discovery notes..."
-              value={sectionNotes.discovery}
-              onChange={(event) => updateSectionNote("discovery", event.target.value)}
-            />
-          </article>
-
-          <article className="mission-card">
-            <h2 className="text-xl font-black">2) Scope Questions</h2>
-            <div className="mt-3 space-y-2 text-slate-700">
-              {groupedChecklist["2) Scope Questions"]?.map((item) => (
-                <label key={item.id} className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={Boolean(checklistState[item.id])}
-                    onChange={(event) =>
-                      setChecklistState((previous) => ({
-                        ...previous,
-                        [item.id]: event.target.checked,
-                      }))
-                    }
-                  />
-                  <span>{item.text}</span>
-                </label>
-              ))}
-            </div>
-            <textarea
-              className="mt-3 min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Scope notes..."
-              value={sectionNotes.scope}
-              onChange={(event) => updateSectionNote("scope", event.target.value)}
-            />
-          </article>
-
-          <article className="mission-card">
-            <h2 className="text-xl font-black">3) Build Check-In Prompts</h2>
-            <div className="mt-3 space-y-2 text-slate-700">
-              {groupedChecklist["3) Build Check-In Prompts"]?.map((item) => (
-                <label key={item.id} className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={Boolean(checklistState[item.id])}
-                    onChange={(event) =>
-                      setChecklistState((previous) => ({
-                        ...previous,
-                        [item.id]: event.target.checked,
-                      }))
-                    }
-                  />
-                  <span>{item.text}</span>
-                </label>
-              ))}
-            </div>
-            <textarea
-              className="mt-3 min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Build notes..."
-              value={sectionNotes.build}
-              onChange={(event) => updateSectionNote("build", event.target.value)}
-            />
-          </article>
-
-          <article className="mission-card">
-            <h2 className="text-xl font-black">4) Wrap-Up Questions</h2>
-            <div className="mt-3 space-y-2 text-slate-700">
-              {groupedChecklist["4) Wrap-Up Questions"]?.map((item) => (
-                <label key={item.id} className="flex items-start gap-2">
-                  <input
-                    type="checkbox"
-                    className="mt-1"
-                    checked={Boolean(checklistState[item.id])}
-                    onChange={(event) =>
-                      setChecklistState((previous) => ({
-                        ...previous,
-                        [item.id]: event.target.checked,
-                      }))
-                    }
-                  />
-                  <span>{item.text}</span>
-                </label>
-              ))}
-            </div>
-            <textarea
-              className="mt-3 min-h-20 w-full rounded-md border border-slate-300 px-3 py-2 text-sm"
-              placeholder="Wrap-up notes..."
-              value={sectionNotes.wrap}
-              onChange={(event) => updateSectionNote("wrap", event.target.value)}
-            />
-          </article>
+          {Object.entries(groupedChecklist).map(([group, items]) => {
+            const meta = sectionMeta[group] ?? {
+              icon: "📌",
+              color: "",
+              noteKey: "discovery",
+            };
+            return (
+              <article
+                key={group}
+                className={`mission-card ${meta.color}`}
+              >
+                <h2 className="text-xl font-bold">
+                  {meta.icon} {group.replace(/^\d\)\s*/, "")}
+                </h2>
+                <div className="mt-3 space-y-2 text-slate-700">
+                  {items.map((item) => (
+                    <label
+                      key={item.id}
+                      className="flex items-start gap-2"
+                    >
+                      <input
+                        type="checkbox"
+                        className="mt-0.5"
+                        checked={Boolean(checklistState[item.id])}
+                        onChange={(event) =>
+                          setChecklistState((previous) => ({
+                            ...previous,
+                            [item.id]: event.target.checked,
+                          }))
+                        }
+                      />
+                      <span>{item.text}</span>
+                    </label>
+                  ))}
+                </div>
+                <textarea
+                  className="mt-3 min-h-20 w-full rounded-lg border-2 border-slate-200 bg-white/80 px-3 py-2 text-sm"
+                  placeholder={`${group.replace(/^\d\)\s*/, "")} notes...`}
+                  value={
+                    sectionNotes[
+                      meta.noteKey as keyof typeof sectionNotes
+                    ]
+                  }
+                  onChange={(event) =>
+                    updateSectionNote(
+                      meta.noteKey as
+                        | "discovery"
+                        | "scope"
+                        | "build"
+                        | "wrap",
+                      event.target.value,
+                    )
+                  }
+                />
+              </article>
+            );
+          })}
         </section>
 
+        {/* Tracking template */}
         <section className="mission-card">
-          <h2 className="text-xl font-black">Tracking Template</h2>
-          <p className="mt-2 text-slate-700">These fields auto-save in this browser.</p>
+          <h2 className="text-xl font-bold">📊 Tracking Template</h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Auto-saved in this browser.
+          </p>
           <div className="mt-3 grid gap-3 md:grid-cols-2">
-            <label className="text-sm font-semibold text-slate-700">
-              Session Date
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.sessionDate}
-                onChange={(event) => updateSessionField("sessionDate", event.target.value)}
-              />
-            </label>
-            <label className="text-sm font-semibold text-slate-700">
-              Game Idea
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.gameIdea}
-                onChange={(event) => updateSessionField("gameIdea", event.target.value)}
-              />
-            </label>
-            <label className="text-sm font-semibold text-slate-700">
-              One Player Action
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.onePlayerAction}
-                onChange={(event) => updateSessionField("onePlayerAction", event.target.value)}
-              />
-            </label>
-            <label className="text-sm font-semibold text-slate-700">
-              Win Condition
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.winCondition}
-                onChange={(event) => updateSessionField("winCondition", event.target.value)}
-              />
-            </label>
-            <label className="text-sm font-semibold text-slate-700">
-              Restart Method
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.restartMethod}
-                onChange={(event) => updateSessionField("restartMethod", event.target.value)}
-              />
-            </label>
-            <label className="text-sm font-semibold text-slate-700">
-              Next Session Focus
-              <input
-                className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
-                value={sessionForm.nextSessionFocus}
-                onChange={(event) => updateSessionField("nextSessionFocus", event.target.value)}
-              />
-            </label>
+            {(
+              [
+                ["sessionDate", "Session Date"],
+                ["gameIdea", "Game Idea"],
+                ["onePlayerAction", "One Player Action"],
+                ["winCondition", "Win Condition"],
+                ["restartMethod", "Restart Method"],
+                ["nextSessionFocus", "Next Session Focus"],
+              ] as [keyof SessionForm, string][]
+            ).map(([key, label]) => (
+              <label
+                key={key}
+                className="text-sm font-semibold text-slate-700"
+              >
+                {label}
+                <input
+                  className="mt-1 w-full rounded-lg border-2 border-slate-200 bg-white/80 px-3 py-2 text-sm font-normal"
+                  value={sessionForm[key]}
+                  onChange={(event) =>
+                    updateSessionField(key, event.target.value)
+                  }
+                />
+              </label>
+            ))}
           </div>
           <label className="mt-3 block text-sm font-semibold text-slate-700">
             What Eli Loved
             <textarea
-              className="mt-1 min-h-24 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
+              className="mt-1 min-h-24 w-full rounded-lg border-2 border-slate-200 bg-white/80 px-3 py-2 text-sm font-normal"
               value={sessionForm.whatEliLoved}
-              onChange={(event) => updateSessionField("whatEliLoved", event.target.value)}
+              onChange={(event) =>
+                updateSessionField("whatEliLoved", event.target.value)
+              }
             />
           </label>
-          <p className="mt-2 text-xs text-emerald-700">Autosave is on.</p>
+          <p className="mt-2 text-xs font-semibold text-emerald-600">
+            ✅ Autosave is on
+          </p>
         </section>
 
-        <section className="mission-card">
-          <h2 className="text-xl font-black">Session Quick Links</h2>
-          <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
-            <li>
-              <a href={slackArtChannelUrl} className="underline" target="_blank" rel="noreferrer">
-                Slack #art Channel
-              </a>
-            </li>
-            <li>
-              <a href={figJamBoardUrl} className="underline" target="_blank" rel="noreferrer">
-                FigJam Board
-              </a>
-            </li>
-            <li>
-              <a href={slackInviteUrl} className="underline" target="_blank" rel="noreferrer">
-                Slack Invite Link
-              </a>
-            </li>
-          </ul>
+        {/* Quick links */}
+        <section className="mission-card card-teal">
+          <h2 className="text-lg font-bold">🔗 Quick Links</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <a
+              href={slackArtChannelUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              📤 #art Channel
+            </a>
+            <a
+              href={figJamBoardUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              ✏️ FigJam Board
+            </a>
+            <a
+              href={slackInviteUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              💬 Slack Invite
+            </a>
+          </div>
         </section>
 
         <Link href="/" className="mission-link inline-flex w-fit">
-          Back To Mission Select
+          ← Back To Mission Select
         </Link>
       </section>
     </main>

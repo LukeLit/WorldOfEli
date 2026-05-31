@@ -37,65 +37,85 @@ function readStorageText(key: string): string {
   return localStorage.getItem(key) ?? "";
 }
 
-const daveChecklistItems = [
-  { id: "upload-gather", section: "1) Upload Eli's Art", text: "Gather all current sketches/photos/screenshots." },
-  { id: "upload-open-art-channel", section: "1) Upload Eli's Art", text: "Open the Slack #art channel." },
-  { id: "upload-drop", section: "1) Upload Eli's Art", text: "Upload files directly in #art (drag/drop or attach)." },
-  { id: "upload-name", section: "1) Upload Eli's Art", text: "Use clear names like eli-session-01-character.png." },
-  { id: "upload-repeat", section: "1) Upload Eli's Art", text: "Add new uploads to #art after each session." },
-  { id: "slack-install-dave", section: "2) Slack On Every Device", text: "Install Slack on Dave's laptop and phone." },
-  { id: "slack-install-eli", section: "2) Slack On Every Device", text: "Install Slack on Eli's main device (with supervision)." },
-  { id: "slack-join", section: "2) Slack On Every Device", text: "Join the World Of Eli Slack workspace from invite link." },
-  { id: "slack-notify", section: "2) Slack On Every Device", text: "Enable notifications on all devices." },
-  { id: "slack-channel", section: "2) Slack On Every Device", text: "Pin or create a private Eli game channel." },
-  { id: "bookmark-home", section: "3) Bookmark Key Links", text: "Bookmark woe.metalgames.xyz on all devices." },
-  { id: "bookmark-figjam", section: "3) Bookmark Key Links", text: "Bookmark the FigJam board." },
-  { id: "bookmark-art", section: "3) Bookmark Key Links", text: "Bookmark the Slack #art channel." },
-  { id: "bookmark-lp", section: "3) Bookmark Key Links", text: "Bookmark /lp lesson plan." },
-  { id: "ready-audio-video", section: "4) Session-Ready Check", text: "Mic/camera tested before call." },
-  { id: "ready-recording", section: "4) Session-Ready Check", text: "Screen recording ready." },
-  { id: "ready-open-tabs", section: "4) Session-Ready Check", text: "Slack, homepage, and #art are open before kickoff." },
-  { id: "ready-figjam", section: "4) Session-Ready Check", text: "FigJam is open before kickoff." },
+const sections = [
+  {
+    id: "upload",
+    title: "Upload Eli's Art",
+    icon: "📤",
+    color: "card-purple",
+    items: [
+      { id: "upload-gather", text: "Gather all current sketches/photos/screenshots." },
+      { id: "upload-open-art-channel", text: "Open the Slack #art channel." },
+      { id: "upload-drop", text: "Upload files directly in #art (drag/drop or attach)." },
+      { id: "upload-name", text: "Use clear names like eli-session-01-character.png." },
+      { id: "upload-repeat", text: "Add new uploads to #art after each session." },
+    ],
+    linkHref: slackArtChannelUrl,
+    linkLabel: "📤 Open #art Channel",
+  },
+  {
+    id: "slack",
+    title: "Slack On Every Device",
+    icon: "💬",
+    color: "card-blue",
+    items: [
+      { id: "slack-install-dave", text: "Install Slack on Dave's laptop and phone." },
+      { id: "slack-install-eli", text: "Install Slack on Eli's main device (with supervision)." },
+      { id: "slack-join", text: "Join the World Of Eli Slack workspace from invite link." },
+      { id: "slack-notify", text: "Enable notifications on all devices." },
+      { id: "slack-channel", text: "Pin or create a private Eli game channel." },
+    ],
+    linkHref: slackInviteUrl,
+    linkLabel: "💬 Slack Invite Link",
+  },
+  {
+    id: "bookmarks",
+    title: "Bookmark Key Links",
+    icon: "🔖",
+    color: "card-orange",
+    items: [
+      { id: "bookmark-home", text: "Bookmark woe.metalgames.xyz on all devices." },
+      { id: "bookmark-figjam", text: "Bookmark the FigJam board." },
+      { id: "bookmark-art", text: "Bookmark the Slack #art channel." },
+      { id: "bookmark-lp", text: "Bookmark /lp lesson plan." },
+    ],
+    linkHref: null,
+    linkLabel: null,
+  },
+  {
+    id: "ready",
+    title: "Session-Ready Check",
+    icon: "✅",
+    color: "card-green",
+    items: [
+      { id: "ready-audio-video", text: "Mic/camera tested before call." },
+      { id: "ready-recording", text: "Screen recording ready." },
+      { id: "ready-open-tabs", text: "Slack, homepage, and #art are open before kickoff." },
+      { id: "ready-figjam", text: "FigJam is open before kickoff." },
+    ],
+    linkHref: null,
+    linkLabel: null,
+  },
 ];
 
 export default function DaveSetupPage() {
-  const [checklistState, setChecklistState] = useState<Record<string, boolean>>(() =>
-    readStorageJson(daveChecklistStorageKey, {}),
+  const [checklistState, setChecklistState] = useState<Record<string, boolean>>(
+    () => readStorageJson(daveChecklistStorageKey, {}),
   );
-  const [notes, setNotes] = useState(() => readStorageText(daveNotesStorageKey));
+  const [notes, setNotes] = useState(() =>
+    readStorageText(daveNotesStorageKey),
+  );
 
   useEffect(() => {
-    localStorage.setItem(daveChecklistStorageKey, JSON.stringify(checklistState));
+    localStorage.setItem(
+      daveChecklistStorageKey,
+      JSON.stringify(checklistState),
+    );
   }, [checklistState]);
 
   useEffect(() => {
     localStorage.setItem(daveNotesStorageKey, notes);
   }, [notes]);
-
-  function renderChecklist(section: string) {
-    return (
-      <div className="mt-3 space-y-2 text-slate-700">
-        {daveChecklistItems
-          .filter((item) => item.section === section)
-          .map((item) => (
-            <label key={item.id} className="flex items-start gap-2">
-              <input
-                type="checkbox"
-                className="mt-1"
-                checked={Boolean(checklistState[item.id])}
-                onChange={(event) =>
-                  setChecklistState((previous) => ({
-                    ...previous,
-                    [item.id]: event.target.checked,
-                  }))
-                }
-              />
-              <span>{item.text}</span>
-            </label>
-          ))}
-      </div>
-    );
-  }
 
   function resetDaveSetupState() {
     const shouldReset = window.confirm(
@@ -112,103 +132,134 @@ export default function DaveSetupPage() {
   }
 
   return (
-    <main className="min-h-screen mario-bg px-5 py-10">
+    <main className="min-h-screen mario-bg px-4 py-8 sm:px-6 sm:py-12">
       <section className="question-panel mx-auto flex w-full max-w-5xl flex-col gap-6">
+        {/* Header */}
         <header>
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
-            /dave
+            🛠️ /dave
           </p>
-          <h1 className="mt-2 text-3xl font-black text-slate-900 sm:text-4xl">
-            Dave Setup Page
+          <h1 className="mt-2 text-3xl font-bold text-slate-900 sm:text-4xl">
+            Dave&apos;s Setup Page
           </h1>
-          <p className="mt-3 text-slate-700">
-            Quick setup checklist to support Eli&apos;s game sessions.
+          <p className="mt-2 text-slate-600">
+            Quick setup checklist so everything is ready before Eli&apos;s
+            session.
           </p>
           <button
             type="button"
-            className="mission-link mt-4 inline-flex"
+            className="mission-link mt-3 inline-flex text-sm"
             onClick={resetDaveSetupState}
           >
-            Reset Saved Dave Checklist
+            🔄 Reset All
           </button>
         </header>
 
-        <section className="mission-card">
-          <h2 className="text-2xl font-black">1) Upload Eli&apos;s Art</h2>
-          {renderChecklist("1) Upload Eli's Art")}
-          <a
-            href={slackArtChannelUrl}
-            className="mission-link mt-3 inline-flex"
-            target="_blank"
-            rel="noreferrer"
+        {/* Bookmark reference */}
+        <section className="mission-card card-teal">
+          <h2 className="text-lg font-bold">🔗 Key Links</h2>
+          <div className="mt-2 flex flex-wrap gap-2 text-sm">
+            <a
+              href={homepageUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              🏠 Homepage
+            </a>
+            <a
+              href={figJamBoardUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              ✏️ FigJam
+            </a>
+            <a
+              href={slackArtChannelUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              📤 #art
+            </a>
+            <a
+              href={slackInviteUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              💬 Slack Invite
+            </a>
+            <Link href="/lp" className="mission-link">
+              📋 Lesson Plan
+            </Link>
+          </div>
+        </section>
+
+        {/* Checklist sections */}
+        {sections.map((section, index) => (
+          <section
+            key={section.id}
+            className={`mission-card ${section.color}`}
           >
-            Open Slack #art Channel
-          </a>
-        </section>
+            <h2 className="text-xl font-bold">
+              {section.icon} {index + 1}) {section.title}
+            </h2>
+            <div className="mt-3 space-y-2 text-slate-700">
+              {section.items.map((item) => (
+                <label key={item.id} className="flex items-start gap-2">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5"
+                    checked={Boolean(checklistState[item.id])}
+                    onChange={(event) =>
+                      setChecklistState((previous) => ({
+                        ...previous,
+                        [item.id]: event.target.checked,
+                      }))
+                    }
+                  />
+                  <span>{item.text}</span>
+                </label>
+              ))}
+            </div>
+            {section.linkHref && (
+              <a
+                href={section.linkHref}
+                className="mission-link mt-3 inline-flex"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {section.linkLabel}
+              </a>
+            )}
+          </section>
+        ))}
 
+        {/* Notes */}
         <section className="mission-card">
-          <h2 className="text-2xl font-black">2) Slack On Every Device</h2>
-          {renderChecklist("2) Slack On Every Device")}
-          <a href={slackInviteUrl} className="mission-link mt-3 inline-flex" target="_blank" rel="noreferrer">
-            Open World Of Eli Slack Invite
-          </a>
-        </section>
-
-        <section className="mission-card">
-          <h2 className="text-2xl font-black">3) Bookmark Key Links</h2>
-          <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
-            <li>
-              Homepage:{" "}
-              <a href={homepageUrl} className="underline" target="_blank" rel="noreferrer">
-                {homepageUrl}
-              </a>
-            </li>
-            <li>
-              FigJam board:{" "}
-              <a href={figJamBoardUrl} className="underline" target="_blank" rel="noreferrer">
-                Eli FigJam Board
-              </a>
-            </li>
-            <li>
-              Art uploads:{" "}
-              <a href={slackArtChannelUrl} className="underline" target="_blank" rel="noreferrer">
-                Slack #art Channel
-              </a>
-            </li>
-            <li>
-              Slack invite:{" "}
-              <a href={slackInviteUrl} className="underline" target="_blank" rel="noreferrer">
-                World Of Eli Slack Invite
-              </a>
-            </li>
-            <li>
-              Lesson plan: <code>/lp</code>
-            </li>
-          </ul>
-          {renderChecklist("3) Bookmark Key Links")}
-        </section>
-
-        <section className="mission-card">
-          <h2 className="text-2xl font-black">4) Session-Ready Check</h2>
-          {renderChecklist("4) Session-Ready Check")}
-          <label className="mt-3 block text-sm font-semibold text-slate-700">
-            Dave Notes (auto-saved)
+          <label className="block text-sm font-semibold text-slate-700">
+            📝 Dave&apos;s Notes (auto-saved)
             <textarea
-              className="mt-1 min-h-24 w-full rounded-md border border-slate-300 px-3 py-2 text-sm font-normal"
+              className="mt-2 min-h-28 w-full rounded-lg border-2 border-slate-200 bg-white/80 px-3 py-2 text-sm font-normal"
               value={notes}
               onChange={(event) => setNotes(event.target.value)}
-              placeholder="Add device details, account notes, or follow-ups here..."
+              placeholder="Device details, account notes, follow-ups..."
             />
           </label>
-          <p className="mt-2 text-xs text-emerald-700">Autosave is on.</p>
+          <p className="mt-2 text-xs font-semibold text-emerald-600">
+            ✅ Autosave is on
+          </p>
         </section>
 
-        <div className="flex flex-wrap gap-3">
-          <Link href="/" className="mission-link inline-flex w-fit">
-            Back To Mission Select
+        {/* Navigation */}
+        <div className="flex flex-wrap gap-2">
+          <Link href="/" className="mission-link">
+            ← Mission Select
           </Link>
-          <Link href="/lp" className="mission-link inline-flex w-fit">
-            Open Lesson Plan
+          <Link href="/lp" className="mission-link">
+            📋 Lesson Plan
           </Link>
         </div>
       </section>

@@ -36,10 +36,12 @@ export default function PlayPage() {
   const [gestureLog, setGestureLog] = useState<string[]>([]);
 
   function pushGestureLog(message: string) {
-    setGestureLog((previous) => [
-      `${new Date().toLocaleTimeString()}: ${message}`,
-      ...previous,
-    ].slice(0, 6));
+    setGestureLog((previous) =>
+      [
+        `${new Date().toLocaleTimeString()}: ${message}`,
+        ...previous,
+      ].slice(0, 6),
+    );
   }
 
   useEffect(() => {
@@ -131,7 +133,9 @@ export default function PlayPage() {
   }
 
   function updateMovementFromPrimaryPointer() {
-    const firstPointer = pointersRef.current.values().next().value as PointerState | undefined;
+    const firstPointer = pointersRef.current.values().next().value as
+      | PointerState
+      | undefined;
     if (!firstPointer) {
       setMovement({ x: 0, y: 0 });
       return;
@@ -215,13 +219,16 @@ export default function PlayPage() {
       const gestureDistance = Math.hypot(deltaX, deltaY);
       const durationMs = Date.now() - pointer.startedAt;
 
-      if (gestureDistance <= TAP_MAX_DISTANCE && durationMs <= TAP_MAX_DURATION_MS) {
+      if (
+        gestureDistance <= TAP_MAX_DISTANCE &&
+        durationMs <= TAP_MAX_DURATION_MS
+      ) {
         pushGestureLog("Tap");
       } else if (gestureDistance >= SWIPE_THRESHOLD && durationMs < 900) {
         if (Math.abs(deltaX) >= Math.abs(deltaY)) {
-          pushGestureLog(deltaX > 0 ? "Swipe Right" : "Swipe Left");
+          pushGestureLog(deltaX > 0 ? "Swipe Right →" : "← Swipe Left");
         } else {
-          pushGestureLog(deltaY > 0 ? "Swipe Down" : "Swipe Up");
+          pushGestureLog(deltaY > 0 ? "Swipe Down ↓" : "↑ Swipe Up");
         }
       }
     }
@@ -255,33 +262,39 @@ export default function PlayPage() {
   }
 
   return (
-    <main className="min-h-screen mario-bg px-5 py-10">
-      <section className="question-panel mx-auto flex w-full max-w-6xl flex-col gap-4">
+    <main className="min-h-screen mario-bg px-4 py-8 sm:px-6 sm:py-12">
+      <section className="question-panel mx-auto flex w-full max-w-5xl flex-col gap-5">
+        {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
-              /play
+              🕹️ /play
             </p>
-            <h1 className="mt-1 text-3xl font-black text-slate-900 sm:text-4xl">
-              Game Container Shell
+            <h1 className="mt-1 text-3xl font-bold text-slate-900 sm:text-4xl">
+              Game Lab
             </h1>
-            <p className="mt-2 text-slate-700">
-              Touch gestures, keyboard input, and fullscreen are wired for rapid game prototyping.
+            <p className="mt-1 text-slate-600">
+              Touch, keyboard &amp; fullscreen — ready for your game engine!
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button type="button" className="mission-link inline-flex" onClick={toggleFullscreen}>
-              {isFullscreen ? "Exit Full Screen" : "Full Screen"}
+            <button
+              type="button"
+              className="mario-btn"
+              onClick={toggleFullscreen}
+            >
+              {isFullscreen ? "↙ Exit Full Screen" : "⛶ Full Screen"}
             </button>
-            <Link href="/" className="mission-link inline-flex">
-              Back To Mission Select
+            <Link href="/" className="mission-link">
+              ← Mission Select
             </Link>
           </div>
         </div>
 
+        {/* Game container */}
         <div
           ref={gameShellRef}
-          className="relative isolate overflow-hidden rounded-xl border-4 border-slate-900 bg-slate-950 text-white shadow-[0_8px_0_#0f172a]"
+          className="relative isolate overflow-hidden rounded-2xl border-4 border-slate-900 bg-slate-950 text-white shadow-[0_8px_0_#0f172a]"
         >
           <div
             className="relative h-[70vh] w-full touch-none overscroll-none"
@@ -290,74 +303,76 @@ export default function PlayPage() {
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
           >
+            {/* Background */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,#38bdf8_0%,#0f172a_55%,#020617_100%)]" />
+
+            {/* Center message */}
             <div className="absolute inset-0 p-4">
-              <div className="flex h-full items-center justify-center rounded-lg border border-white/20 bg-black/20">
-                <div className="text-center">
-                  <p className="text-xs uppercase tracking-[0.18em] text-cyan-200">
-                    World Of Eli Runtime
+              <div className="flex h-full items-center justify-center rounded-xl border-2 border-white/15 bg-black/20">
+                <div className="text-center px-4">
+                  <p className="text-4xl" aria-hidden="true">
+                    🚀
                   </p>
-                  <p className="mt-2 text-2xl font-black">Drop your game engine here</p>
-                  <p className="mt-2 text-sm text-slate-200">
-                    Canvas/WebGL/Phaser/Three.js can mount into this container.
+                  <p className="mt-3 text-2xl font-bold sm:text-3xl">
+                    Game Loading Zone
+                  </p>
+                  <p className="mt-2 text-sm text-slate-300 sm:text-base">
+                    Your game engine (Canvas / Phaser / Three.js) plugs in here.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="pointer-events-none absolute left-3 top-3 rounded-md bg-black/50 px-3 py-2 text-xs">
+            {/* HUD overlay */}
+            <div className="pointer-events-none absolute left-3 top-3 rounded-lg bg-black/60 px-3 py-2 text-xs font-mono backdrop-blur-sm">
               <p>
-                Move X/Y: {movement.x.toFixed(2)}, {movement.y.toFixed(2)}
+                Move: {movement.x.toFixed(2)}, {movement.y.toFixed(2)}
               </p>
-              <p>Pinch Scale: {pinchScale.toFixed(2)}</p>
+              <p>Pinch: {pinchScale.toFixed(2)}</p>
               <p>
-                Actions: A {actions.a ? "ON" : "off"} / B {actions.b ? "ON" : "off"}
+                A:{" "}
+                <span className={actions.a ? "text-emerald-400" : ""}>
+                  {actions.a ? "ON" : "off"}
+                </span>{" "}
+                / B:{" "}
+                <span className={actions.b ? "text-fuchsia-400" : ""}>
+                  {actions.b ? "ON" : "off"}
+                </span>
               </p>
             </div>
 
-            <div className="absolute bottom-3 left-3 flex gap-2">
-              <button
-                type="button"
-                className="rounded-md border border-white/40 bg-black/40 px-3 py-2 text-sm"
-                onPointerDown={() => setDirectionalInput(-1, 0, true)}
-                onPointerUp={() => setDirectionalInput(-1, 0, false)}
-                onPointerCancel={() => setDirectionalInput(-1, 0, false)}
-              >
-                Left
-              </button>
-              <button
-                type="button"
-                className="rounded-md border border-white/40 bg-black/40 px-3 py-2 text-sm"
-                onPointerDown={() => setDirectionalInput(0, -1, true)}
-                onPointerUp={() => setDirectionalInput(0, -1, false)}
-                onPointerCancel={() => setDirectionalInput(0, -1, false)}
-              >
-                Up
-              </button>
-              <button
-                type="button"
-                className="rounded-md border border-white/40 bg-black/40 px-3 py-2 text-sm"
-                onPointerDown={() => setDirectionalInput(0, 1, true)}
-                onPointerUp={() => setDirectionalInput(0, 1, false)}
-                onPointerCancel={() => setDirectionalInput(0, 1, false)}
-              >
-                Down
-              </button>
-              <button
-                type="button"
-                className="rounded-md border border-white/40 bg-black/40 px-3 py-2 text-sm"
-                onPointerDown={() => setDirectionalInput(1, 0, true)}
-                onPointerUp={() => setDirectionalInput(1, 0, false)}
-                onPointerCancel={() => setDirectionalInput(1, 0, false)}
-              >
-                Right
-              </button>
+            {/* D-pad */}
+            <div className="absolute bottom-3 left-3 flex gap-1.5 sm:gap-2">
+              {[
+                { label: "◀", x: -1, y: 0 },
+                { label: "▲", x: 0, y: -1 },
+                { label: "▼", x: 0, y: 1 },
+                { label: "▶", x: 1, y: 0 },
+              ].map((btn) => (
+                <button
+                  key={btn.label}
+                  type="button"
+                  className="rounded-lg border-2 border-white/30 bg-white/10 px-3 py-2 text-base font-bold backdrop-blur-sm transition-colors active:bg-white/30"
+                  onPointerDown={() =>
+                    setDirectionalInput(btn.x, btn.y, true)
+                  }
+                  onPointerUp={() =>
+                    setDirectionalInput(btn.x, btn.y, false)
+                  }
+                  onPointerCancel={() =>
+                    setDirectionalInput(btn.x, btn.y, false)
+                  }
+                >
+                  {btn.label}
+                </button>
+              ))}
             </div>
 
+            {/* A / B buttons */}
             <div className="absolute bottom-3 right-3 flex gap-2">
               <button
                 type="button"
-                className="rounded-full border border-emerald-300/80 bg-emerald-500/30 px-4 py-3 text-sm font-bold"
+                className="h-14 w-14 rounded-full border-3 border-emerald-300/80 bg-emerald-500/40 text-lg font-black backdrop-blur-sm transition-colors active:bg-emerald-500/70"
                 onPointerDown={() => setActionInput("a", true)}
                 onPointerUp={() => setActionInput("a", false)}
                 onPointerCancel={() => setActionInput("a", false)}
@@ -366,7 +381,7 @@ export default function PlayPage() {
               </button>
               <button
                 type="button"
-                className="rounded-full border border-fuchsia-300/80 bg-fuchsia-500/30 px-4 py-3 text-sm font-bold"
+                className="h-14 w-14 rounded-full border-3 border-fuchsia-300/80 bg-fuchsia-500/40 text-lg font-black backdrop-blur-sm transition-colors active:bg-fuchsia-500/70"
                 onPointerDown={() => setActionInput("b", true)}
                 onPointerUp={() => setActionInput("b", false)}
                 onPointerCancel={() => setActionInput("b", false)}
@@ -377,17 +392,18 @@ export default function PlayPage() {
           </div>
         </div>
 
-        <section className="mission-card">
-          <h2 className="text-xl font-black">Latest Gesture Events</h2>
+        {/* Gesture log */}
+        <section className="mission-card card-blue">
+          <h2 className="text-lg font-bold">📡 Input Log</h2>
           {gestureLog.length > 0 ? (
-            <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
+            <ul className="mt-2 list-disc space-y-0.5 pl-5 text-sm text-slate-600 font-mono">
               {gestureLog.map((entry) => (
                 <li key={entry}>{entry}</li>
               ))}
             </ul>
           ) : (
-            <p className="mt-3 text-slate-700">
-              Tap, swipe, or pinch in the play area to capture touch events.
+            <p className="mt-2 text-sm text-slate-500">
+              Tap, swipe, or pinch in the play area to see events here.
             </p>
           )}
         </section>
