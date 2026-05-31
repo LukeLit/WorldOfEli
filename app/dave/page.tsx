@@ -7,6 +7,8 @@ const homepageUrl = "https://woe.metalgames.xyz";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=sharing";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 
@@ -62,6 +64,7 @@ const sections = [
       { id: "upload-gather", text: "Gather all current sketches/photos/screenshots." },
       { id: "upload-open-art-channel", text: "Open the Slack #art channel." },
       { id: "upload-drop", text: "Upload files directly in #art (drag/drop or attach)." },
+      { id: "upload-drive-option", text: "Optional: upload/share copies in Google Drive folder." },
       { id: "upload-name", text: "Use clear names like eli-session-01-character.png." },
       { id: "upload-repeat", text: "Add new uploads to #art after each session." },
     ],
@@ -182,6 +185,14 @@ export default function DaveSetupPage() {
               rel="noreferrer"
             >
               📤 #art
+            </a>
+            <a
+              href={driveFolderUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              🗂️ Drive Share
             </a>
             <a
               href={slackInviteUrl}

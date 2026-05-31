@@ -7,6 +7,8 @@ const hasPlayableBuild = safePlayUrl !== "#";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=sharing";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 const sessionGuideUrl =
@@ -52,6 +54,7 @@ const eliCards = [
     color: "card-purple",
     links: [
       { href: slackArtChannelUrl, label: "📤 Upload Art" },
+      { href: driveFolderUrl, label: "🗂️ Google Drive Share" },
       { href: figJamBoardUrl, label: "✏️ Draw on FigJam" },
     ],
     big: false,
@@ -90,11 +93,6 @@ const grownupCards = [
     href: "/dave",
     title: "🛠️ Dave Setup",
     description: "Parent setup checklist and device readiness",
-  },
-  {
-    href: "/luke",
-    title: "🧠 Luke Cheatsheet",
-    description: "Host focus guide and sticky quick links",
   },
   {
     href: "/play",
@@ -215,6 +213,17 @@ export default function Home() {
               <p className="font-semibold text-slate-800">🎨 Slack #art</p>
               <p className="mt-1 text-sm text-slate-500">
                 Upload and review art/screenshots in one place
+              </p>
+            </a>
+            <a
+              href={driveFolderUrl}
+              className="grownup-card block"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p className="font-semibold text-slate-800">🗂️ Google Drive Share</p>
+              <p className="mt-1 text-sm text-slate-500">
+                Optional backup upload location for art files
               </p>
             </a>
             <a

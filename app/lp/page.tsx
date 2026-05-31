@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=sharing";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
 const slackInviteUrl =
@@ -360,6 +362,14 @@ export default function LessonPlanPage() {
               rel="noreferrer"
             >
               📤 #art Channel
+            </a>
+            <a
+              href={driveFolderUrl}
+              className="mission-link"
+              target="_blank"
+              rel="noreferrer"
+            >
+              🗂️ Google Drive Share
             </a>
             <a
               href={figJamBoardUrl}

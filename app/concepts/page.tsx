@@ -3,6 +3,8 @@ import Link from "next/link";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=sharing";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 
@@ -30,6 +32,14 @@ export default function ConceptsPage() {
             rel="noreferrer"
           >
             📤 Upload to #art
+          </a>
+          <a
+            href={driveFolderUrl}
+            className="mission-link"
+            target="_blank"
+            rel="noreferrer"
+          >
+            🗂️ Google Drive Share
           </a>
           <a
             href={figJamBoardUrl}
