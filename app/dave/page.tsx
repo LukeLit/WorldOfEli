@@ -39,6 +39,21 @@ function readStorageText(key: string): string {
 
 const sections = [
   {
+    id: "app-setup",
+    title: "App Setup (Slack + Devices)",
+    icon: "💬",
+    color: "card-blue",
+    items: [
+      { id: "slack-install-dave", text: "Install Slack on Dave's laptop and phone." },
+      { id: "slack-install-eli", text: "Install Slack on Eli's main device (with supervision)." },
+      { id: "slack-join", text: "Join the World Of Eli Slack workspace from invite link." },
+      { id: "slack-notify", text: "Enable notifications on all devices." },
+      { id: "slack-channel", text: "Pin or create a private Eli game channel." },
+    ],
+    linkHref: slackInviteUrl,
+    linkLabel: "💬 Slack Invite Link",
+  },
+  {
     id: "upload",
     title: "Upload Eli's Art",
     icon: "📤",
@@ -52,21 +67,6 @@ const sections = [
     ],
     linkHref: slackArtChannelUrl,
     linkLabel: "📤 Open #art Channel",
-  },
-  {
-    id: "slack",
-    title: "Slack On Every Device",
-    icon: "💬",
-    color: "card-blue",
-    items: [
-      { id: "slack-install-dave", text: "Install Slack on Dave's laptop and phone." },
-      { id: "slack-install-eli", text: "Install Slack on Eli's main device (with supervision)." },
-      { id: "slack-join", text: "Join the World Of Eli Slack workspace from invite link." },
-      { id: "slack-notify", text: "Enable notifications on all devices." },
-      { id: "slack-channel", text: "Pin or create a private Eli game channel." },
-    ],
-    linkHref: slackInviteUrl,
-    linkLabel: "💬 Slack Invite Link",
   },
   {
     id: "bookmarks",
@@ -84,14 +84,14 @@ const sections = [
   },
   {
     id: "ready",
-    title: "Session-Ready Check",
+    title: "Session-Ready (Slack Huddle)",
     icon: "✅",
     color: "card-green",
     items: [
-      { id: "ready-audio-video", text: "Mic/camera tested before call." },
-      { id: "ready-recording", text: "Screen recording ready." },
-      { id: "ready-open-tabs", text: "Slack, homepage, and #art are open before kickoff." },
-      { id: "ready-figjam", text: "FigJam is open before kickoff." },
+      { id: "ready-huddle-start", text: "Start a Slack huddle and confirm Eli can join." },
+      { id: "ready-audio-video", text: "Mic, speaker, and camera are tested inside huddle." },
+      { id: "ready-open-tabs", text: "Keep Slack, #art, homepage, and /play open before kickoff." },
+      { id: "ready-figjam", text: "FigJam is open in a separate tab for quick doodles." },
     ],
     linkHref: null,
     linkLabel: null,
