@@ -1,5 +1,12 @@
 import Link from "next/link";
 
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=drive_link";
+const figJamBoardUrl =
+  "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
+const slackInviteUrl =
+  "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
+
 const discoveryQuestions = [
   "What game do you want to make today?",
   "Who is the hero in your game?",
@@ -106,6 +113,27 @@ Restart Method:
 What Eli Loved:
 Next Session Focus:`}
           </pre>
+        </section>
+
+        <section className="mission-card">
+          <h2 className="text-xl font-black">Session Quick Links</h2>
+          <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
+            <li>
+              <a href={driveFolderUrl} className="underline" target="_blank" rel="noreferrer">
+                Google Drive Upload Folder
+              </a>
+            </li>
+            <li>
+              <a href={figJamBoardUrl} className="underline" target="_blank" rel="noreferrer">
+                FigJam Board
+              </a>
+            </li>
+            <li>
+              <a href={slackInviteUrl} className="underline" target="_blank" rel="noreferrer">
+                Slack Invite Link
+              </a>
+            </li>
+          </ul>
         </section>
 
         <Link href="/" className="mission-link inline-flex w-fit">

@@ -6,6 +6,10 @@ const safePlayUrl = isSafeHref(playUrl) ? playUrl : fallbackPlayUrl;
 const hasPlayableBuild = safePlayUrl !== "#";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=drive_link";
+const slackInviteUrl =
+  "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 const contactNote =
   process.env.NEXT_PUBLIC_CONTACT_NOTE ?? "Add your project notes and links here.";
 
@@ -36,8 +40,10 @@ const cards = [
     description: "Store characters, map sketches, and style ideas in one place.",
     href: "/concepts",
     cta: "Open Art Folder",
-    secondaryHref: figJamBoardUrl,
-    secondaryCta: "Open FigJam Board",
+    secondaryHref: driveFolderUrl,
+    secondaryCta: "Open Google Drive Folder",
+    tertiaryHref: figJamBoardUrl,
+    tertiaryCta: "Open FigJam Board",
   },
   {
     title: "Game Ideas + Docs",
@@ -117,6 +123,16 @@ export default function Home() {
                     {card.secondaryCta}
                   </a>
                 ) : null}
+                {"tertiaryHref" in card && card.tertiaryHref ? (
+                  <a
+                    href={card.tertiaryHref}
+                    className="mt-2 inline-flex mission-link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {card.tertiaryCta}
+                  </a>
+                ) : null}
               </article>
             ))}
           </div>
@@ -134,6 +150,24 @@ export default function Home() {
               <Link href="/dave" className="underline underline-offset-2">
                 Dave setup checklist
               </Link>
+              ,{" "}
+              <a
+                href={driveFolderUrl}
+                className="underline underline-offset-2"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Google Drive uploads
+              </a>
+              ,{" "}
+              <a
+                href={slackInviteUrl}
+                className="underline underline-offset-2"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Slack invite
+              </a>
               .
             </p>
           </div>

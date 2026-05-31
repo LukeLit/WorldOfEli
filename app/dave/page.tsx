@@ -3,6 +3,10 @@ import Link from "next/link";
 const homepageUrl = "https://woe.metalgames.xyz";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
+const driveFolderUrl =
+  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=drive_link";
+const slackInviteUrl =
+  "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 
 export default function DaveSetupPage() {
   return (
@@ -24,7 +28,22 @@ export default function DaveSetupPage() {
           <h2 className="text-2xl font-black">1) Upload Eli&apos;s Art</h2>
           <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
             <li>Gather all current sketches/photos/screenshots.</li>
-            <li>Drop files into the repo folder: <code>assets/concepts/</code>.</li>
+            <li>
+              Open the shared folder:{" "}
+              <a
+                href={driveFolderUrl}
+                className="underline"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Eli Google Drive Uploads
+              </a>
+              .
+            </li>
+            <li>
+              Drag and drop files directly into the open Drive tab (no GitHub
+              needed).
+            </li>
             <li>Use clear names like <code>eli-session-01-character.png</code>.</li>
             <li>Add new uploads after each session.</li>
           </ul>
@@ -35,6 +54,13 @@ export default function DaveSetupPage() {
           <ul className="mt-3 list-disc space-y-1 pl-6 text-slate-700">
             <li>Install Slack on Dave&apos;s laptop + phone.</li>
             <li>Install Slack on Eli&apos;s main device (with parent supervision).</li>
+            <li>
+              Join workspace with invite link:{" "}
+              <a href={slackInviteUrl} className="underline" target="_blank" rel="noreferrer">
+                World Of Eli Slack Invite
+              </a>
+              .
+            </li>
             <li>Sign into the same workspace and verify notifications are enabled.</li>
             <li>Create or pin a private channel for Eli&apos;s game project.</li>
           </ul>
@@ -53,6 +79,18 @@ export default function DaveSetupPage() {
               FigJam board:{" "}
               <a href={figJamBoardUrl} className="underline" target="_blank" rel="noreferrer">
                 Eli FigJam Board
+              </a>
+            </li>
+            <li>
+              Upload folder:{" "}
+              <a href={driveFolderUrl} className="underline" target="_blank" rel="noreferrer">
+                Eli Google Drive Uploads
+              </a>
+            </li>
+            <li>
+              Slack invite:{" "}
+              <a href={slackInviteUrl} className="underline" target="_blank" rel="noreferrer">
+                World Of Eli Slack Invite
               </a>
             </li>
             <li>
