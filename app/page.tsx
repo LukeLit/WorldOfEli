@@ -9,6 +9,10 @@ const figJamBoardUrl =
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
+const sessionGuideUrl =
+  "https://docs.google.com/document/d/1DPGnzvgmL6LefsTYJi2S1X6j_LZ69lgpuKsrfohTJX4/edit";
+const gameDesignDocUrl =
+  "https://docs.google.com/document/d/1Q9SwF7OttUEVDRRLXdMo6_P4aRIRuWPin_GvMo7FrVc/edit";
 
 function isSafeHref(href: string): boolean {
   return href.startsWith("/") || /^https?:\/\//i.test(href) || href === "#";
@@ -59,6 +63,10 @@ const eliCards = [
     href: "/docs",
     cta: "See Ideas",
     color: "card-orange",
+    links: [
+      { href: sessionGuideUrl, label: "📋 Session Guide" },
+      { href: gameDesignDocUrl, label: "🎮 Design Doc" },
+    ],
     big: false,
   },
   {
