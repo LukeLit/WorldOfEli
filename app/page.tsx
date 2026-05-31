@@ -6,8 +6,7 @@ const safePlayUrl = isSafeHref(playUrl) ? playUrl : fallbackPlayUrl;
 const hasPlayableBuild = safePlayUrl !== "#";
 const figJamBoardUrl =
   "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
-const driveFolderUrl =
-  "https://drive.google.com/drive/folders/1h99_8i6VuOI0fCl9eDLCv38576rDxLIH?usp=drive_link";
+const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
 const contactNote =
@@ -29,6 +28,13 @@ const cards = [
       ]
     : []),
   {
+    title: "Play Container",
+    description:
+      "Open the touch-ready game shell with fullscreen and input scaffolding.",
+    href: "/play",
+    cta: "Open /play",
+  },
+  {
     title: "Lesson Plan",
     description:
       "Track the questions to ask Eli and follow a clear session structure.",
@@ -40,8 +46,8 @@ const cards = [
     description: "Store characters, map sketches, and style ideas in one place.",
     href: "/concepts",
     cta: "Open Art Folder",
-    secondaryHref: driveFolderUrl,
-    secondaryCta: "Open Google Drive Folder",
+    secondaryHref: slackArtChannelUrl,
+    secondaryCta: "Open Slack #art Channel",
     tertiaryHref: figJamBoardUrl,
     tertiaryCta: "Open FigJam Board",
   },
@@ -61,7 +67,7 @@ const cards = [
   {
     title: "Grownup Setup",
     description:
-      "Parent setup checklist for uploads, Slack on all devices, and bookmarks.",
+      "Parent setup checklist for #art uploads, Slack on all devices, and bookmarks.",
     href: "/dave",
     cta: "Open /dave",
   },
@@ -108,7 +114,7 @@ export default function Home() {
                     href={card.href}
                     className="mt-4 inline-flex mission-link"
                     target={card.href.startsWith("http") ? "_blank" : undefined}
-                    rel={card.href.startsWith("http") ? "noreferrer" : undefined}
+                    rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   >
                     {card.cta}
                   </a>
@@ -118,7 +124,7 @@ export default function Home() {
                     href={card.secondaryHref}
                     className="mt-2 inline-flex mission-link"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     {card.secondaryCta}
                   </a>
@@ -128,7 +134,7 @@ export default function Home() {
                     href={card.tertiaryHref}
                     className="mt-2 inline-flex mission-link"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     {card.tertiaryCta}
                   </a>
@@ -152,19 +158,19 @@ export default function Home() {
               </Link>
               ,{" "}
               <a
-                href={driveFolderUrl}
+                href={slackArtChannelUrl}
                 className="underline underline-offset-2"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
-                Google Drive uploads
+                Slack #art uploads
               </a>
               ,{" "}
               <a
                 href={slackInviteUrl}
                 className="underline underline-offset-2"
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
               >
                 Slack invite
               </a>
