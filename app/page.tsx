@@ -9,184 +9,225 @@ const figJamBoardUrl =
 const slackArtChannelUrl = "https://worldofeli.slack.com/archives/C0B842ALLQY";
 const slackInviteUrl =
   "https://join.slack.com/t/worldofeli/shared_invite/zt-3zw5nghjk-oZsfLGslpQ68JtfgNjvSgg";
-const contactNote =
-  process.env.NEXT_PUBLIC_CONTACT_NOTE ?? "Add your project notes and links here.";
+const sessionGuideUrl =
+  "https://docs.google.com/document/d/1DPGnzvgmL6LefsTYJi2S1X6j_LZ69lgpuKsrfohTJX4/edit";
+const gameDesignDocUrl =
+  "https://docs.google.com/document/d/1Q9SwF7OttUEVDRRLXdMo6_P4aRIRuWPin_GvMo7FrVc/edit";
 
 function isSafeHref(href: string): boolean {
   return href.startsWith("/") || /^https?:\/\//i.test(href) || href === "#";
 }
 
-const cards = [
+/* ─── Card definitions ─── */
+
+const eliCards = [
   ...(hasPlayableBuild
     ? [
         {
+          icon: "🎮",
           title: "Play Eli's Game",
-          description: "Launch the latest playable version.",
+          description: "Your game is ready — jump in and play!",
           href: safePlayUrl,
-          cta: "Open Playable",
+          cta: "PLAY NOW!",
+          color: "card-green",
+          big: true,
         },
       ]
     : []),
   {
-    title: "Play Container",
-    description:
-      "Open the touch-ready game shell with fullscreen and input scaffolding.",
+    icon: "🕹️",
+    title: "Game Lab",
+    description: "Test controls, touch screen buttons, and game inputs!",
     href: "/play",
-    cta: "Open /play",
+    cta: "Open Game Lab",
+    color: "card-green",
+    big: false,
   },
   {
-    title: "Lesson Plan",
-    description:
-      "Track the questions to ask Eli and follow a clear session structure.",
-    href: "/lp",
-    cta: "Open /lp",
-  },
-  {
-    title: "Luke Host Cheat Sheet",
-    description:
-      "Personal host page with engagement tactics and sticky quick links.",
-    href: "/luke",
-    cta: "Open /luke",
-  },
-  {
-    title: "Concept Art",
-    description: "Store characters, map sketches, and style ideas in one place.",
+    icon: "🎨",
+    title: "Art Vault",
+    description: "Your drawings, character designs, and map sketches live here!",
     href: "/concepts",
-    cta: "Open Art Folder",
-    secondaryHref: slackArtChannelUrl,
-    secondaryCta: "Open Slack #art Channel",
-    tertiaryHref: figJamBoardUrl,
-    tertiaryCta: "Open FigJam Board",
+    cta: "See My Art",
+    color: "card-purple",
+    links: [
+      { href: slackArtChannelUrl, label: "📤 Upload Art" },
+      { href: figJamBoardUrl, label: "✏️ Draw on FigJam" },
+    ],
+    big: false,
   },
   {
-    title: "Game Ideas + Docs",
-    description:
-      "Capture mechanics, story notes, and design decisions for each session.",
+    icon: "💡",
+    title: "Game Ideas",
+    description: "All the cool mechanics, story notes, and design plans!",
     href: "/docs",
-    cta: "Open Docs Folder",
+    cta: "See Ideas",
+    color: "card-orange",
+    links: [
+      { href: sessionGuideUrl, label: "📋 Session Guide" },
+      { href: gameDesignDocUrl, label: "🎮 Design Doc" },
+    ],
+    big: false,
   },
   {
+    icon: "📓",
     title: "Build Journal",
-    description: "Track what we built each session and what to do next.",
+    description: "What we made, what was fun, and what's next!",
     href: "/journal",
-    cta: "Open Journal",
+    cta: "Read Journal",
+    color: "card-yellow",
+    big: false,
+  },
+];
+
+const grownupCards = [
+  {
+    href: "/lp",
+    title: "📋 Lesson Plan",
+    description: "Session checklist, prompts, and tracking",
   },
   {
-    title: "Grownup Setup",
-    description:
-      "Parent setup checklist for #art uploads, Slack on all devices, and bookmarks.",
     href: "/dave",
-    cta: "Open /dave",
+    title: "🛠️ Dave Setup",
+    description: "Parent setup checklist and device readiness",
+  },
+  {
+    href: "/luke",
+    title: "🧠 Luke Cheatsheet",
+    description: "Host focus guide and sticky quick links",
+  },
+  {
+    href: "/play",
+    title: "🕹️ Play Container",
+    description: "Touch/keyboard/fullscreen runtime shell",
   },
 ];
 
 export default function Home() {
   return (
-    <div className="min-h-screen mario-bg px-5 py-10 text-slate-900">
-      <main className="mx-auto flex w-full max-w-6xl flex-col gap-8">
-        <section className="question-panel">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-700">
+    <div className="min-h-screen mario-bg px-4 py-8 sm:px-6 sm:py-12">
+      <main className="mx-auto flex w-full max-w-5xl flex-col gap-8">
+        {/* ─── HERO ─── */}
+        <section className="question-panel text-center">
+          <p className="text-5xl sm:text-6xl animate-float" aria-hidden="true">
+            🎮
+          </p>
+          <h1 className="mt-2 text-4xl font-bold leading-tight text-slate-900 sm:text-5xl md:text-6xl">
             World Of Eli
-          </p>
-          <h1 className="mt-3 text-4xl font-black leading-tight text-slate-900 sm:text-5xl">
-            Build a game in one session
           </h1>
-          <p className="mt-4 max-w-3xl text-lg text-slate-700">
-            This is Eli&apos;s game dev basecamp. We gather ideas, concept art,
-            and build notes here. When a playable build is ready, it will appear
-            in Mission Select.
+          <p className="mx-auto mt-3 max-w-xl text-lg text-slate-700 sm:text-xl">
+            Welcome to your game creation headquarters!
+            <br />
+            Pick a mission below to start building.
           </p>
-          <div className="mt-6 flex flex-wrap gap-3">
-            <span className="rounded-full bg-amber-200 px-3 py-2 text-sm font-semibold text-amber-900">
-              {contactNote}
-            </span>
-          </div>
         </section>
 
+        {/* ─── ELI'S MISSIONS ─── */}
         <section>
-          <h2 className="text-2xl font-black text-white drop-shadow-[0_2px_0_#0f172a]">
-            Eli&apos;s Mission Select
+          <h2 className="flex items-center gap-2 text-2xl font-bold text-white drop-shadow-[0_2px_0_#0f172a] sm:text-3xl">
+            <span>⭐</span> Mission Select
           </h2>
-          <div className="mt-4 grid gap-4 md:grid-cols-2">
-            {cards.map((card) => (
-              <article key={card.title} className="mission-card">
-                <h3 className="text-xl font-black">{card.title}</h3>
-                <p className="mt-2 text-slate-700">{card.description}</p>
-                {card.href.startsWith("/") ? (
-                  <Link href={card.href} className="mt-4 inline-flex mission-link">
-                    {card.cta}
-                  </Link>
-                ) : (
-                  <a
-                    href={card.href}
-                    className="mt-4 inline-flex mission-link"
-                    target={card.href.startsWith("http") ? "_blank" : undefined}
-                    rel={card.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                  >
-                    {card.cta}
-                  </a>
-                )}
-                {"secondaryHref" in card && card.secondaryHref ? (
-                  <a
-                    href={card.secondaryHref}
-                    className="mt-2 inline-flex mission-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {card.secondaryCta}
-                  </a>
-                ) : null}
-                {"tertiaryHref" in card && card.tertiaryHref ? (
-                  <a
-                    href={card.tertiaryHref}
-                    className="mt-2 inline-flex mission-link"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {card.tertiaryCta}
-                  </a>
-                ) : null}
+
+          <div className="mt-4 grid gap-5 sm:grid-cols-2">
+            {eliCards.map((card) => (
+              <article
+                key={card.title}
+                className={`mission-card ${card.color} ${card.big ? "sm:col-span-2" : ""}`}
+              >
+                <span className="card-icon" aria-hidden="true">
+                  {card.icon}
+                </span>
+                <h3 className="text-xl font-bold sm:text-2xl">{card.title}</h3>
+                <p className="mt-1 text-slate-600">{card.description}</p>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {card.big ? (
+                    card.href.startsWith("/") ? (
+                      <Link href={card.href} className="btn-green">
+                        {card.cta}
+                      </Link>
+                    ) : (
+                      <a
+                        href={card.href}
+                        className="btn-green"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {card.cta}
+                      </a>
+                    )
+                  ) : card.href.startsWith("/") ? (
+                    <Link href={card.href} className="mission-link">
+                      {card.cta}
+                    </Link>
+                  ) : (
+                    <a
+                      href={card.href}
+                      className="mission-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {card.cta}
+                    </a>
+                  )}
+
+                  {"links" in card && card.links
+                    ? card.links.map((link) => (
+                        <a
+                          key={link.label}
+                          href={link.href}
+                          className="mission-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {link.label}
+                        </a>
+                      ))
+                    : null}
+                </div>
               </article>
             ))}
           </div>
         </section>
 
-        <section className="mx-auto w-full max-w-6xl">
-          <div className="rounded-lg border-2 border-slate-800 bg-white/80 px-4 py-3 text-sm text-slate-700">
-            <p className="font-bold text-slate-900">Grownup Corner</p>
-            <p className="mt-1">
-              Parent/admin tools:{" "}
-              <Link href="/lp" className="underline underline-offset-2">
-                lesson plan
-              </Link>{" "}
-              and{" "}
-              <Link href="/dave" className="underline underline-offset-2">
-                Dave setup checklist
+        {/* ─── GROWNUP CORNER ─── */}
+        <section>
+          <h2 className="flex items-center gap-2 text-lg font-semibold text-slate-700">
+            <span>🔧</span> Grownup Corner
+          </h2>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {grownupCards.map((card) => (
+              <Link key={card.href} href={card.href} className="grownup-card block">
+                <p className="font-semibold text-slate-800">{card.title}</p>
+                <p className="mt-1 text-sm text-slate-500">{card.description}</p>
               </Link>
-              ,{" "}
-              <Link href="/luke" className="underline underline-offset-2">
-                Luke cheatsheet
-              </Link>
-              ,{" "}
-              <a
-                href={slackArtChannelUrl}
-                className="underline underline-offset-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Slack #art uploads
-              </a>
-              ,{" "}
-              <a
-                href={slackInviteUrl}
-                className="underline underline-offset-2"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Slack invite
-              </a>
-              .
-            </p>
+            ))}
+          </div>
+
+          <div className="mt-3 grid gap-3 sm:grid-cols-2">
+            <a
+              href={slackArtChannelUrl}
+              className="grownup-card block"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p className="font-semibold text-slate-800">🎨 Slack #art</p>
+              <p className="mt-1 text-sm text-slate-500">
+                Upload and review art/screenshots in one place
+              </p>
+            </a>
+            <a
+              href={slackInviteUrl}
+              className="grownup-card block"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <p className="font-semibold text-slate-800">💬 Slack Invite</p>
+              <p className="mt-1 text-sm text-slate-500">
+                Add devices/participants to World Of Eli workspace
+              </p>
+            </a>
           </div>
         </section>
       </main>
