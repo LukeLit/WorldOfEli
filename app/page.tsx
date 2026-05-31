@@ -4,6 +4,8 @@ const fallbackPlayUrl = "#";
 const playUrl = process.env.NEXT_PUBLIC_PLAY_URL ?? fallbackPlayUrl;
 const safePlayUrl = isSafeHref(playUrl) ? playUrl : fallbackPlayUrl;
 const hasPlayableBuild = safePlayUrl !== "#";
+const figJamBoardUrl =
+  "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
 const contactNote =
   process.env.NEXT_PUBLIC_CONTACT_NOTE ?? "Add your project notes and links here.";
 
@@ -34,6 +36,8 @@ const cards = [
     description: "Store characters, map sketches, and style ideas in one place.",
     href: "/concepts",
     cta: "Open Art Folder",
+    secondaryHref: figJamBoardUrl,
+    secondaryCta: "Open FigJam Board",
   },
   {
     title: "Game Ideas + Docs",
@@ -47,6 +51,13 @@ const cards = [
     description: "Track what we built each session and what to do next.",
     href: "/journal",
     cta: "Open Journal",
+  },
+  {
+    title: "Grownup Setup",
+    description:
+      "Parent setup checklist for uploads, Slack on all devices, and bookmarks.",
+    href: "/dave",
+    cta: "Open /dave",
   },
 ];
 
@@ -96,11 +107,37 @@ export default function Home() {
                     {card.cta}
                   </a>
                 )}
+                {"secondaryHref" in card && card.secondaryHref ? (
+                  <a
+                    href={card.secondaryHref}
+                    className="mt-2 inline-flex mission-link"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {card.secondaryCta}
+                  </a>
+                ) : null}
               </article>
             ))}
           </div>
         </section>
 
+        <section className="mx-auto w-full max-w-6xl">
+          <div className="rounded-lg border-2 border-slate-800 bg-white/80 px-4 py-3 text-sm text-slate-700">
+            <p className="font-bold text-slate-900">Grownup Corner</p>
+            <p className="mt-1">
+              Parent/admin tools:{" "}
+              <Link href="/lp" className="underline underline-offset-2">
+                lesson plan
+              </Link>{" "}
+              and{" "}
+              <Link href="/dave" className="underline underline-offset-2">
+                Dave setup checklist
+              </Link>
+              .
+            </p>
+          </div>
+        </section>
       </main>
     </div>
   );

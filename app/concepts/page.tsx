@@ -1,5 +1,8 @@
 import Link from "next/link";
 
+const figJamBoardUrl =
+  "https://www.figma.com/board/OpO30xLt5cdUpM9r4x48kV/Untitled?node-id=0-1&t=sXaltxoug56MkQ9b-1";
+
 export default function ConceptsPage() {
   return (
     <main className="min-h-screen mario-bg px-5 py-10">
@@ -9,9 +12,19 @@ export default function ConceptsPage() {
           Put Eli&apos;s sketches, character designs, and map drafts in{" "}
           <code>assets/concepts/</code>.
         </p>
-        <Link href="/" className="mission-link mt-5 inline-flex">
-          Back To Mission Select
-        </Link>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <a
+            href={figJamBoardUrl}
+            className="mission-link inline-flex"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Open FigJam Board
+          </a>
+          <Link href="/" className="mission-link inline-flex">
+            Back To Mission Select
+          </Link>
+        </div>
       </section>
     </main>
   );
